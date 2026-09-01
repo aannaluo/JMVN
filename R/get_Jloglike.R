@@ -81,7 +81,7 @@ get_Jloglike <- function(nlmeObjects){
   ## Joint likelihood
   Jloglike=list(mu.loglike=mu.loglike,sigma.loglike=sigma.loglike, ran.loglike=ran.loglike)
   
-  # TODO consider adding Jdf=Jdf
+
   result <- list(Jloglike=Jloglike, Jfixed=Jfixed, Jraneff=Jraneff, Jdisp=Jdisp,
        str.fixed=str.fixed, str.disp=str.disp, lower.fixed=lower.fixed, lower.disp=lower.disp,
        upper.fixed=upper.fixed, upper.disp=upper.disp,SIGMA.dim=SIGMA.dim, SIGMA.block=SIGMA.block, Jdf=Jdf)
