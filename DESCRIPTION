@@ -24,7 +24,6 @@ Imports:
   parallel,
   doParallel,
   Matrix,
-  here,
   stats
 URL: https://github.com/aannaluo/JMVN
 BugReports: https://github.com/aannaluo/JMVN/issues
@@ -32,6 +31,7 @@ Suggests:
     knitr,
     rmarkdown,
     xtable,
-    R.utils
+    R.utils,
+    here
 VignetteBuilder: knitr
 Config/roxygen2/version: 8.1.0

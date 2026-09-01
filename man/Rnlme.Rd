@@ -26,7 +26,7 @@ Rnlme(
 \item{idVar}{Character string specifying the subject/group identifier variable.}
 
 \item{sd.method}{Method for estimating standard errors. Options are \code{"None"},
-\code{"HL"}, \code{"aGH"}, or \code{"Both"}. Default is \code{"None"}.}
+\code{"HL"}. Default is \code{"None"}.}
 
 \item{dispersion.SD}{Logical indicating whether dispersion parameter standard errors
 should be estimated. Default is \code{FALSE}.}

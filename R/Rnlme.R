@@ -11,7 +11,7 @@
 #' @param long.data A longitudinal dataset containing observations and grouping information.
 #' @param idVar Character string specifying the subject/group identifier variable.
 #' @param sd.method Method for estimating standard errors. Options are \code{"None"},
-#' \code{"HL"}, \code{"aGH"}, or \code{"Both"}. Default is \code{"None"}.
+#' \code{"HL"}. Default is \code{"None"}.
 #' @param dispersion.SD Logical indicating whether dispersion parameter standard errors
 #' should be estimated. Default is \code{FALSE}.
 #' @param independent.raneff Logical indicating whether random effects are assumed
@@ -96,7 +96,7 @@ Rnlme <- function(nlmeObjects, long.data, idVar,
     cat("Start estimating random effects ...\n")
     ran.output <- est_raneff(RespLog=Jloglike, long.data, idVar, Jraneff,
                              fixedest0, dispest0, invSIGMA0,
-                             uniqueID, n,ni,q, N, q_split,df.sigma, df.randisp,
+                             uniqueID, n,ni,q, N,
                              Verbose=Verbose, scale=TRUE)
     Bi <- ran.output$Bi
     B <- ran.output$B
@@ -200,29 +200,29 @@ Rnlme <- function(nlmeObjects, long.data, idVar,
     fixedSD <- sd_output
     cat("done.\n")
 
-  } else if(sd.method=="aGH"){
-    cat("Start estimating SD for fixed parameters ...\n ...\n")
-    sd_output <- get_sd_aGH(RespLog=Jloglike, long.data, idVar,
-                                        fixedest0, dispest0, invSIGMA0,Bi, B,
-                                        Jfixed, Jraneff,
-                                        ghsize=ghsize, Silent=T, epsilon=10^{-6},
-                                        parallel=TRUE)
-    fixedSD <- sd_output
-    cat("done.\n")
-
-  } else if(sd.method=="Both"){
-    cat("Start estimating SD for fixed parameters ...\n ...\n")
-    sd_HL <- get_sd(RespLog=Jloglike, long.data,  idVar,
-                        fixedest0, dispest0, invSIGMA0, SIGMA0,
-                        Bi, B,
-                        Jfixed,Jraneff)
-    sd_aGH <-  get_sd_aGH(RespLog=Jloglike, long.data, idVar,
-                          fixedest0, dispest0, invSIGMA0,Bi, B,
-                          Jfixed, Jraneff,
-                          ghsize=ghsize, Silent=T, epsilon=10^{-6},
-                          parallel=TRUE)
-    fixedSD=list(HL=sd_HL, aGH=sd_aGH)
-    cat("done.\n")
+  # } else if(sd.method=="aGH"){
+  #   cat("Start estimating SD for fixed parameters ...\n ...\n")
+  #   sd_output <- get_sd_aGH(RespLog=Jloglike, long.data, idVar,
+  #                                       fixedest0, dispest0, invSIGMA0,Bi, B,
+  #                                       Jfixed, Jraneff,
+  #                                       ghsize=sdghsize, Silent=T, epsilon=10^{-6},
+  #                                       parallel=TRUE)
+  #   fixedSD <- sd_output
+  #   cat("done.\n")
+  #
+  # } else if(sd.method=="Both"){
+  #   cat("Start estimating SD for fixed parameters ...\n ...\n")
+  #   sd_HL <- get_sd(RespLog=Jloglike, long.data,  idVar,
+  #                       fixedest0, dispest0, invSIGMA0, SIGMA0,
+  #                       Bi, B,
+  #                       Jfixed,Jraneff)
+  #   sd_aGH <-  get_sd_aGH(RespLog=Jloglike, long.data, idVar,
+  #                         fixedest0, dispest0, invSIGMA0,Bi, B,
+  #                         Jfixed, Jraneff,
+  #                         ghsize=sdghsize, Silent=T, epsilon=10^{-6},
+  #                         parallel=TRUE)
+  #   fixedSD=list(HL=sd_HL, aGH=sd_aGH)
+  #   cat("done.\n")
   } else if(sd.method=="None") {
     fixedSD <- NULL
   }

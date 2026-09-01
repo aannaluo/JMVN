@@ -1,6 +1,6 @@
 est_raneff <- function(RespLog, long.data, idVar, Jraneff,
                        fixedest0, dispest0, invSIGMA0,
-                       uniqueID, n,ni,q,N,q_split,df.sigma, df.randisp,
+                       uniqueID, n,ni,q,N,
                        Verbose=TRUE, scale=TRUE){
 
   nBi <- nB <- c()
