@@ -1,15 +1,15 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>/404.html</loc></url>
-<url><loc>/articles/Rnlme_Tutorial.html</loc></url>
-<url><loc>/articles/index.html</loc></url>
-<url><loc>/authors.html</loc></url>
-<url><loc>/index.html</loc></url>
-<url><loc>/news/index.html</loc></url>
-<url><loc>/reference/Rnlme.html</loc></url>
-<url><loc>/reference/get_Jloglike.html</loc></url>
-<url><loc>/reference/get_info_sigma.html</loc></url>
-<url><loc>/reference/get_nlme_loglike.html</loc></url>
-<url><loc>/reference/get_sd.html</loc></url>
-<url><loc>/reference/index.html</loc></url>
+<url><loc>https://aaannaluo.github.io/JMVN/404.html</loc></url>
+<url><loc>https://aaannaluo.github.io/JMVN/articles/Rnlme_Tutorial.html</loc></url>
+<url><loc>https://aaannaluo.github.io/JMVN/articles/index.html</loc></url>
+<url><loc>https://aaannaluo.github.io/JMVN/authors.html</loc></url>
+<url><loc>https://aaannaluo.github.io/JMVN/index.html</loc></url>
+<url><loc>https://aaannaluo.github.io/JMVN/news/index.html</loc></url>
+<url><loc>https://aaannaluo.github.io/JMVN/reference/Rnlme.html</loc></url>
+<url><loc>https://aaannaluo.github.io/JMVN/reference/get_Jloglike.html</loc></url>
+<url><loc>https://aaannaluo.github.io/JMVN/reference/get_info_sigma.html</loc></url>
+<url><loc>https://aaannaluo.github.io/JMVN/reference/get_nlme_loglike.html</loc></url>
+<url><loc>https://aaannaluo.github.io/JMVN/reference/get_sd.html</loc></url>
+<url><loc>https://aaannaluo.github.io/JMVN/reference/index.html</loc></url>
 </urlset>
 

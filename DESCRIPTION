@@ -25,7 +25,7 @@ Imports:
   doParallel,
   Matrix,
   stats
-URL: https://github.com/aannaluo/JMVN
+URL: https://aaannaluo.github.io/JMVN
 BugReports: https://github.com/aannaluo/JMVN/issues
 Suggests: 
     knitr,
