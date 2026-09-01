@@ -1,0 +1,236 @@
+# Robust_NLME
+
+## This repo contains R code that was used for the real data analysis and simulations in my paper \`\`Jointly Modeling Means and Variances for Nonlinear Mixed Effects Models with Measurement Errors and Outliers’’
+
+------------------------------------------------------------------------
+
+### What’s in the repo
+
+> `/src`: source code
+
+- `00_dependencies.R`: the dependencies packages  
+- `Rnlme.R`: the function which jointly models mean and variance for
+  NLME. Measurement error model can be added if needed.
+- `get_sd_bootstrap1.R`: the function produces adjusted SD by using
+  parametric bootstrapping, when the random effect $a_{i}$ (see
+  Model (2) in the paper) follows a normal distribution
+- `get_sd_bootstrap2.R`: the function produces adjusted SD by using
+  parametric bootstrapping, when the random effect $a_{i}$ (see
+  Model (2) in the paper) follows an inverse $\chi^{2}$ distribution
+- `get_Jloglike.R`, `est_fixed.R`, etc: all the other R files are
+  self-defined functions sourced in the above functions and main
+  analysis.
+
+> `/data`:
+
+- `toy_data.rds`: A toy data generated from simulation to illustrate how
+  to use our methods.
+- `raw_data.csv`: (**EMPTY**) DTP data used in the real analysis. The
+  data that support the findings of this study are confidential due to
+  privacy or ethical restrictions.
+
+> `/simulation`: R files for different simulation settings (*see details
+> about the simulation design in my paper Section 5*)
+
+- `Setting_I`: Setting I
+- `Setting_II_df=3`: Setting II with df=3
+- `Setting_II_df=5`: Setting II with df=5
+- `Setting_III`: Setting III (*The corresponding results shown in the
+  Supplementary Materials*)
+- `Setting_IV`: Setting IV (*The corresponding results shown in the
+  Supplementary Materials*)
+- `Setting_SUPP`: A supplementary simulation setting (*The corresponding
+  results shown in the Supplementary Materials*)
+
+> `/real data analysis`: R files for real data analysis (*see details in
+> my paper Section 4*)
+
+- `00_dependencies.R`: the dependencies packages
+- `01_preprocess.R`: reprocess the raw data and produce clean data for
+  analysis
+- `02_model.R`:
+
+> `/figures`: figures used in the paper based on the real data analysis
+
+### How to re-produce the results in the paper
+
+> Download the entire repo in your local path
+
+> Simulations
+
+- Run each file in the `/simulation` folder
+
+> Real data analysis
+
+- Run the following R scripts in the `\real data analysis` step by step
+  - `00_dependencies.R`: install all dependencies packages
+  - `01_data_process.R`: pre-process the raw data; make and save the
+    analytic data
+  - `02_model_fitting_adj_trt.R`: fit models for three methods: LB, TS,
+    and JM
+
+### Example: apply the proposed methods to the toy data
+
+``` r
+
+########################### load packages
+library(nlme)
+library(tidyverse)
+library(Deriv)
+library(stringr)
+library(LaplacesDemon)
+library(purrr)
+library(MASS)
+library(xtable)
+
+rm(list=ls())
+########################## source all functions  
+(file.sources = list.files(path=here::here("src"),pattern="*.R$"))
+(file.sources <- paste0(here::here("src"), "/", file.sources))
+sapply(file.sources,source)
+
+###############################################
+
+#### Read in the data
+simdat <- readRDS(here::here("inst/extdata","toy_data.rds"))
+
+# 100 unique patients
+# 15 repeated measurements per patient
+# var: patid, day, lgcopy, cd4
+
+#### pre-define the functions we need for modeling
+    nf1 <- function(p1,p2,p3,t) p1+p2*exp(-p3*t)
+    nf2 <- function(p1,p2,p3,t) p1+p2*t+p3*t^2
+
+#### LB method: nlme()
+    cat("--Fit NLME() \n")
+    dat_g <- groupedData(lgcopy~day|patid, data=simdat)
+  
+    
+    start0 <- c(p1=1,p2=2,p3=3) # random starting values
+    nls.fit  <- nls(lgcopy~nf1(p1,p2,p3, day), data=dat_g, start=start0)
+    start <- coef(nls.fit) # update starting values
+    nlme.fit <- withTimeout({try(nlme(lgcopy~nf1(p1,p2,p3, day),fixed = p1+p2+p3 ~1,random  = p1+p3 ~1,
+                     data=dat_g,start=start))},timeout=1.5,onTimeout="warning")
+#### TS method:
+    cat("--Runing Two-step model\n")
+
+    # step 1: fit CD4 model and get predicted true CD4 values
+    
+    cd4.fit <- try(lme(cd4~day+I(day^2), data=simdat, random=~1|patid))
+    simdat$cd4.pred <- fitted(cd4.fit)
+     
+    # step 2: Joint modeling mean and variance for NLME
+    
+    # variance model:  
+    sigmaObject_TS <- list(model=~1+cd4.pred+(1|patid),
+                           link='log',
+                           ran.dist="normal",
+                           str.fixed=c(2*log(nlme.fit$sigma), 0),
+                           lower.fixed=NULL,
+                           upper.fixed=NULL,
+                           fixName="alpha",
+                           ranName="a",
+                           dispName="siga",
+                           str.disp=0.5)
+    # mean model
+    nlmeObject_TS <- list(nf = "nf1",
+                          model= lgcopy ~ nf(p1,p2,p3,day),
+                          var=c("day"),
+                          fixed = p1+p2+p3 ~1,
+                          random = p1+p3 ~1,
+                          family='normal', 
+                          ran.dist='normal',
+                          fixName="beta",
+                          ranName="u",
+                          dispName="d",
+                          sigma=sigmaObject_TS,    # residual dispersion model (include residual random eff)
+                          ran.Cov=NULL,  # random effect dispersion model (include random random eff (double random eff))
+                          str.fixed=fixef(nlme.fit),  # starting value for fixed effect
+                          str.disp=as.numeric(VarCorr(nlme.fit)[,"StdDev"][c("p1", "p3")]),  # starting value for fixed dispersion of random eff
+                          lower.fixed=NULL, # lower bounds for fixed eff
+                          upper.fixed=rep(100,3), # upper bounds for fixed eff
+                          lower.disp=c(0,0), # lower bounds for fixed dispersion of random eff
+                          upper.disp=c(Inf,Inf) # upper bounds for  fixed dispersion of random eff)
+                          )
+    nlmeObjects_TS=list(nlmeObject_TS)
+    
+    TS <- try(Rnlme(nlmeObjects=nlmeObjects_TS, long.data=simdat, 
+                        idVar="patid", sd.method="HL", dispersion.SD = TRUE,
+                        independent.raneff=FALSE))
+
+    
+#### JM method
+    cat("--Runing Joint model\n")
+    
+    #### JM
+    sigma1 <- list(model=NULL,
+                   str.disp=as.numeric(VarCorr(cd4.fit)[,"StdDev"][2]),
+                   lower.disp=NULL,
+                   upper.disp=NULL,
+                   parName="xi")
+    
+    # measurement error model
+    lmeObject_JM <- list(nf = "nf2" ,
+                         model= cd4 ~ nf(p1,p2,p3,day),
+                         var=c("day"),
+                         fixed = p1+p2+p3 ~1,
+                         random = p1 ~1,
+                         family='normal', 
+                         ran.dist='normal',
+                         fixName="gamma",
+                         ranName="b",
+                         dispName="sigb",
+                         sigma=sigma1,    # residual dispersion model (include residual random eff)
+                         ran.Cov=NULL,  # random effect dispersion model (include random random eff (double random eff))
+                         str.fixed=fixef(cd4.fit),  # starting value for fixed effect
+                         str.disp=as.numeric(VarCorr(cd4.fit)[,"StdDev"][1]),  # starting value for fixed dispersion of random eff
+                         lower.fixed=NULL, # lower bounds for fixed eff
+                         upper.fixed=rep(100,3), # upper bounds for fixed eff
+                         lower.disp=c(0), # lower bounds for fixed dispersion of random eff
+                         upper.disp=c(Inf) # upper bounds for  fixed dispersion of random eff
+                         )
+    # variance model:  
+    sigma2 <- list(model=~1+cd4.true+(1|patid),
+                   link='log',
+                   ran.dist="normal",
+                   str.fixed=c(2*log(nlme.fit$sigma), 0),
+                   lower.fixed=NULL,
+                   upper.fixed=NULL,
+                   fixName="alpha",
+                   ranName="a",
+                   dispName="siga",
+                   str.disp=0.5,
+                   trueVal.model=list(var="cd4.true", model=lmeObject_JM)
+                   )
+    
+    # mean model
+    nlmeObject_JM <- list(nf = "nf1",
+                          model= lgcopy ~ nf(p1,p2,p3,day),
+                          var=c("day"),
+                          fixed = p1+p2+p3 ~1,
+                          random = p1+p3 ~1,
+                          family='normal', 
+                          ran.dist='normal',
+                          fixName="beta",
+                          ranName="u",
+                          dispName="d",
+                          sigma=sigma2,    # residual dispersion model (include residual random eff)
+                          ran.Cov=NULL,  # random effect dispersion model (include random random eff (double random eff)
+                          str.fixed=fixef(nlme.fit),  # starting value for fixed effect
+                          str.disp=as.numeric(VarCorr(nlme.fit)[,"StdDev"][c("p1", "p3")]),  # starting value for fixed dispersion of random eff
+                          lower.fixed=NULL, # lower bounds for fixed eff
+                          upper.fixed=rep(100,3), # upper bounds for fixed eff
+                          lower.disp=c(0,0), # lower bounds for fixed dispersion of random eff
+                          upper.disp=c(Inf,Inf) # upper bounds for  fixed dispersion of random eff
+                          )
+    
+    nlmeObjects_JM <- list(nlmeObject_JM, lmeObject_JM)
+    
+    JM <- try(Rnlme(nlmeObjects=nlmeObjects_JM, long.data=simdat, 
+                    idVar="patid", sd.method="HL", dispersion.SD = TRUE,
+                    independent.raneff="byModel"))
+    
+    JM
+  
+```
