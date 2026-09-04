@@ -64,255 +64,26 @@
 <h3 id="whats-in-the-repo">What’s in the repo<a class="anchor" aria-label="anchor" href="#whats-in-the-repo"></a>
 </h3>
 <blockquote>
-<p><code>/src</code>: source code</p>
-</blockquote>
+<p><code>/R</code>: source code</p>
 <ul>
-<li>
-<code>00_dependencies.R</code>: the dependencies packages<br>
-</li>
 <li>
 <code>Rnlme.R</code>: the function which jointly models mean and variance for NLME. Measurement error model can be added if needed.</li>
 <li>
-<code>get_sd_bootstrap1.R</code>: the function produces adjusted SD by using parametric bootstrapping, when the random effect <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mi>i</mi></msub><annotation encoding="application/x-tex">a_i</annotation></semantics></math> (see Model (2) in the paper) follows a normal distribution</li>
-<li>
-<code>get_sd_bootstrap2.R</code>: the function produces adjusted SD by using parametric bootstrapping, when the random effect <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mi>i</mi></msub><annotation encoding="application/x-tex">a_i</annotation></semantics></math> (see Model (2) in the paper) follows an inverse <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>χ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\chi^2</annotation></semantics></math> distribution</li>
+<code>Rnlme_methods.R</code>: Various S3 functions for the Rnlme class such as Summary, VarCorr, etc,..</li>
 <li>
 <code>get_Jloglike.R</code>, <code>est_fixed.R</code>, etc: all the other R files are self-defined functions sourced in the above functions and main analysis.</li>
 </ul>
-<blockquote>
-<p><code>/data</code>:</p>
+<p><code>/inst/extdata</code>:</p>
 </blockquote>
 <ul>
 <li>
 <code>toy_data.rds</code>: A toy data generated from simulation to illustrate how to use our methods.</li>
-<li>
-<code>raw_data.csv</code>: (<strong>EMPTY</strong>) DTP data used in the real analysis. The data that support the findings of this study are confidential due to privacy or ethical restrictions.</li>
-</ul>
-<blockquote>
-<p><code>/simulation</code>: R files for different simulation settings (<em>see details about the simulation design in my paper Section 5</em>)</p>
-</blockquote>
-<ul>
-<li>
-<code>Setting_I</code>: Setting I</li>
-<li>
-<code>Setting_II_df=3</code>: Setting II with df=3</li>
-<li>
-<code>Setting_II_df=5</code>: Setting II with df=5</li>
-<li>
-<code>Setting_III</code>: Setting III (<em>The corresponding results shown in the Supplementary Materials</em>)</li>
-<li>
-<code>Setting_IV</code>: Setting IV (<em>The corresponding results shown in the Supplementary Materials</em>)</li>
-<li>
-<code>Setting_SUPP</code>: A supplementary simulation setting (<em>The corresponding results shown in the Supplementary Materials</em>)</li>
-</ul>
-<blockquote>
-<p><code>/real data analysis</code>: R files for real data analysis (<em>see details in my paper Section 4</em>)</p>
-</blockquote>
-<ul>
-<li>
-<code>00_dependencies.R</code>: the dependencies packages</li>
-<li>
-<code>01_preprocess.R</code>: reprocess the raw data and produce clean data for analysis</li>
-<li>
-<code>02_model.R</code>:</li>
-</ul>
-<blockquote>
-<p><code>/figures</code>: figures used in the paper based on the real data analysis</p>
-</blockquote>
-</div>
-<div class="section level3">
-<h3 id="how-to-re-produce-the-results-in-the-paper">How to re-produce the results in the paper<a class="anchor" aria-label="anchor" href="#how-to-re-produce-the-results-in-the-paper"></a>
-</h3>
-<blockquote>
-<p>Download the entire repo in your local path</p>
-</blockquote>
-<blockquote>
-<p>Simulations</p>
-</blockquote>
-<ul>
-<li>Run each file in the <code>/simulation</code> folder</li>
-</ul>
-<blockquote>
-<p>Real data analysis</p>
-</blockquote>
-<ul>
-<li>Run the following R scripts in the <code>\real data analysis</code> step by step
-<ul>
-<li>
-<code>00_dependencies.R</code>: install all dependencies packages</li>
-<li>
-<code>01_data_process.R</code>: pre-process the raw data; make and save the analytic data</li>
-<li>
-<code>02_model_fitting_adj_trt.R</code>: fit models for three methods: LB, TS, and JM</li>
-</ul>
-</li>
 </ul>
 </div>
 <div class="section level3">
-<h3 id="example-apply-the-proposed-methods-to-the-toy-data">Example: apply the proposed methods to the toy data<a class="anchor" aria-label="anchor" href="#example-apply-the-proposed-methods-to-the-toy-data"></a>
+<h3 id="example-apply-the-proposed-methods-to-the-toy-data">
+<a href="https://aannaluo.github.io/JMVN/articles/Rnlme_Tutorial.html" class="external-link">Example: apply the proposed methods to the toy data</a><a class="anchor" aria-label="anchor" href="#example-apply-the-proposed-methods-to-the-toy-data"></a>
 </h3>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="co">########################### load packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/nlme/" class="external-link">nlme</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">Deriv</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org" class="external-link">stringr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LaplacesDemonR/LaplacesDemon" class="external-link">LaplacesDemon</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/" class="external-link">purrr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">MASS</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://xtable.r-forge.r-project.org/" class="external-link">xtable</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span>list<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/ls.html" class="external-link">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">########################## source all functions  </span></span>
-<span><span class="op">(</span><span class="va">file.sources</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>path<span class="op">=</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"src"</span><span class="op">)</span>,pattern<span class="op">=</span><span class="st">"*.R$"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">(</span><span class="va">file.sources</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"src"</span><span class="op">)</span>, <span class="st">"/"</span>, <span class="va">file.sources</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">file.sources</span>,<span class="va">source</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">###############################################</span></span>
-<span></span>
-<span><span class="co">#### Read in the data</span></span>
-<span><span class="va">simdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"inst/extdata"</span>,<span class="st">"toy_data.rds"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 100 unique patients</span></span>
-<span><span class="co"># 15 repeated measurements per patient</span></span>
-<span><span class="co"># var: patid, day, lgcopy, cd4</span></span>
-<span></span>
-<span><span class="co">#### pre-define the functions we need for modeling</span></span>
-<span>    <span class="va">nf1</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">p1</span>,<span class="va">p2</span>,<span class="va">p3</span>,<span class="va">t</span><span class="op">)</span> <span class="va">p1</span><span class="op">+</span><span class="va">p2</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">p3</span><span class="op">*</span><span class="va">t</span><span class="op">)</span></span>
-<span>    <span class="va">nf2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">p1</span>,<span class="va">p2</span>,<span class="va">p3</span>,<span class="va">t</span><span class="op">)</span> <span class="va">p1</span><span class="op">+</span><span class="va">p2</span><span class="op">*</span><span class="va">t</span><span class="op">+</span><span class="va">p3</span><span class="op">*</span><span class="va">t</span><span class="op">^</span><span class="fl">2</span></span>
-<span></span>
-<span><span class="co">#### LB method: nlme()</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"--Fit NLME() \n"</span><span class="op">)</span></span>
-<span>    <span class="va">dat_g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/groupedData.html" class="external-link">groupedData</a></span><span class="op">(</span><span class="va">lgcopy</span><span class="op">~</span><span class="va">day</span><span class="op">|</span><span class="va">patid</span>, data<span class="op">=</span><span class="va">simdat</span><span class="op">)</span></span>
-<span>  </span>
-<span>    </span>
-<span>    <span class="va">start0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>p1<span class="op">=</span><span class="fl">1</span>,p2<span class="op">=</span><span class="fl">2</span>,p3<span class="op">=</span><span class="fl">3</span><span class="op">)</span> <span class="co"># random starting values</span></span>
-<span>    <span class="va">nls.fit</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/nls.html" class="external-link">nls</a></span><span class="op">(</span><span class="va">lgcopy</span><span class="op">~</span><span class="fu">nf1</span><span class="op">(</span><span class="va">p1</span>,<span class="va">p2</span>,<span class="va">p3</span>, <span class="va">day</span><span class="op">)</span>, data<span class="op">=</span><span class="va">dat_g</span>, start<span class="op">=</span><span class="va">start0</span><span class="op">)</span></span>
-<span>    <span class="va">start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">nls.fit</span><span class="op">)</span> <span class="co"># update starting values</span></span>
-<span>    <span class="va">nlme.fit</span> <span class="op">&lt;-</span> <span class="fu">withTimeout</span><span class="op">(</span><span class="op">{</span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/nlme.html" class="external-link">nlme</a></span><span class="op">(</span><span class="va">lgcopy</span><span class="op">~</span><span class="fu">nf1</span><span class="op">(</span><span class="va">p1</span>,<span class="va">p2</span>,<span class="va">p3</span>, <span class="va">day</span><span class="op">)</span>,fixed <span class="op">=</span> <span class="va">p1</span><span class="op">+</span><span class="va">p2</span><span class="op">+</span><span class="va">p3</span> <span class="op">~</span><span class="fl">1</span>,random  <span class="op">=</span> <span class="va">p1</span><span class="op">+</span><span class="va">p3</span> <span class="op">~</span><span class="fl">1</span>,</span>
-<span>                     data<span class="op">=</span><span class="va">dat_g</span>,start<span class="op">=</span><span class="va">start</span><span class="op">)</span><span class="op">)</span><span class="op">}</span>,timeout<span class="op">=</span><span class="fl">1.5</span>,onTimeout<span class="op">=</span><span class="st">"warning"</span><span class="op">)</span></span>
-<span><span class="co">#### TS method:</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"--Runing Two-step model\n"</span><span class="op">)</span></span>
-<span></span>
-<span>    <span class="co"># step 1: fit CD4 model and get predicted true CD4 values</span></span>
-<span>    </span>
-<span>    <span class="va">cd4.fit</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme</a></span><span class="op">(</span><span class="va">cd4</span><span class="op">~</span><span class="va">day</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">day</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, data<span class="op">=</span><span class="va">simdat</span>, random<span class="op">=</span><span class="op">~</span><span class="fl">1</span><span class="op">|</span><span class="va">patid</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="va">simdat</span><span class="op">$</span><span class="va">cd4.pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/fitted.values.html" class="external-link">fitted</a></span><span class="op">(</span><span class="va">cd4.fit</span><span class="op">)</span></span>
-<span>     </span>
-<span>    <span class="co"># step 2: Joint modeling mean and variance for NLME</span></span>
-<span>    </span>
-<span>    <span class="co"># variance model:  </span></span>
-<span>    <span class="va">sigmaObject_TS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>model<span class="op">=</span><span class="op">~</span><span class="fl">1</span><span class="op">+</span><span class="va">cd4.pred</span><span class="op">+</span><span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">patid</span><span class="op">)</span>,</span>
-<span>                           link<span class="op">=</span><span class="st">'log'</span>,</span>
-<span>                           ran.dist<span class="op">=</span><span class="st">"normal"</span>,</span>
-<span>                           str.fixed<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">nlme.fit</span><span class="op">$</span><span class="va">sigma</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span>,</span>
-<span>                           lower.fixed<span class="op">=</span><span class="cn">NULL</span>,</span>
-<span>                           upper.fixed<span class="op">=</span><span class="cn">NULL</span>,</span>
-<span>                           fixName<span class="op">=</span><span class="st">"alpha"</span>,</span>
-<span>                           ranName<span class="op">=</span><span class="st">"a"</span>,</span>
-<span>                           dispName<span class="op">=</span><span class="st">"siga"</span>,</span>
-<span>                           str.disp<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span>
-<span>    <span class="co"># mean model</span></span>
-<span>    <span class="va">nlmeObject_TS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>nf <span class="op">=</span> <span class="st">"nf1"</span>,</span>
-<span>                          model<span class="op">=</span> <span class="va">lgcopy</span> <span class="op">~</span> <span class="fu">nf</span><span class="op">(</span><span class="va">p1</span>,<span class="va">p2</span>,<span class="va">p3</span>,<span class="va">day</span><span class="op">)</span>,</span>
-<span>                          var<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"day"</span><span class="op">)</span>,</span>
-<span>                          fixed <span class="op">=</span> <span class="va">p1</span><span class="op">+</span><span class="va">p2</span><span class="op">+</span><span class="va">p3</span> <span class="op">~</span><span class="fl">1</span>,</span>
-<span>                          random <span class="op">=</span> <span class="va">p1</span><span class="op">+</span><span class="va">p3</span> <span class="op">~</span><span class="fl">1</span>,</span>
-<span>                          family<span class="op">=</span><span class="st">'normal'</span>, </span>
-<span>                          ran.dist<span class="op">=</span><span class="st">'normal'</span>,</span>
-<span>                          fixName<span class="op">=</span><span class="st">"beta"</span>,</span>
-<span>                          ranName<span class="op">=</span><span class="st">"u"</span>,</span>
-<span>                          dispName<span class="op">=</span><span class="st">"d"</span>,</span>
-<span>                          sigma<span class="op">=</span><span class="va">sigmaObject_TS</span>,    <span class="co"># residual dispersion model (include residual random eff)</span></span>
-<span>                          ran.Cov<span class="op">=</span><span class="cn">NULL</span>,  <span class="co"># random effect dispersion model (include random random eff (double random eff))</span></span>
-<span>                          str.fixed<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/fixed.effects.html" class="external-link">fixef</a></span><span class="op">(</span><span class="va">nlme.fit</span><span class="op">)</span>,  <span class="co"># starting value for fixed effect</span></span>
-<span>                          str.disp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/VarCorr.html" class="external-link">VarCorr</a></span><span class="op">(</span><span class="va">nlme.fit</span><span class="op">)</span><span class="op">[</span>,<span class="st">"StdDev"</span><span class="op">]</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"p1"</span>, <span class="st">"p3"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,  <span class="co"># starting value for fixed dispersion of random eff</span></span>
-<span>                          lower.fixed<span class="op">=</span><span class="cn">NULL</span>, <span class="co"># lower bounds for fixed eff</span></span>
-<span>                          upper.fixed<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">3</span><span class="op">)</span>, <span class="co"># upper bounds for fixed eff</span></span>
-<span>                          lower.disp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, <span class="co"># lower bounds for fixed dispersion of random eff</span></span>
-<span>                          upper.disp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">Inf</span>,<span class="cn">Inf</span><span class="op">)</span> <span class="co"># upper bounds for  fixed dispersion of random eff)</span></span>
-<span>                          <span class="op">)</span></span>
-<span>    <span class="va">nlmeObjects_TS</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">nlmeObject_TS</span><span class="op">)</span></span>
-<span>    </span>
-<span>    <span class="va">TS</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="reference/Rnlme.html">Rnlme</a></span><span class="op">(</span>nlmeObjects<span class="op">=</span><span class="va">nlmeObjects_TS</span>, long.data<span class="op">=</span><span class="va">simdat</span>, </span>
-<span>                        idVar<span class="op">=</span><span class="st">"patid"</span>, sd.method<span class="op">=</span><span class="st">"HL"</span>, dispersion.SD <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                        independent.raneff<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span>    </span>
-<span><span class="co">#### JM method</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"--Runing Joint model\n"</span><span class="op">)</span></span>
-<span>    </span>
-<span>    <span class="co">#### JM</span></span>
-<span>    <span class="va">sigma1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>model<span class="op">=</span><span class="cn">NULL</span>,</span>
-<span>                   str.disp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/VarCorr.html" class="external-link">VarCorr</a></span><span class="op">(</span><span class="va">cd4.fit</span><span class="op">)</span><span class="op">[</span>,<span class="st">"StdDev"</span><span class="op">]</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>                   lower.disp<span class="op">=</span><span class="cn">NULL</span>,</span>
-<span>                   upper.disp<span class="op">=</span><span class="cn">NULL</span>,</span>
-<span>                   parName<span class="op">=</span><span class="st">"xi"</span><span class="op">)</span></span>
-<span>    </span>
-<span>    <span class="co"># measurement error model</span></span>
-<span>    <span class="va">lmeObject_JM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>nf <span class="op">=</span> <span class="st">"nf2"</span> ,</span>
-<span>                         model<span class="op">=</span> <span class="va">cd4</span> <span class="op">~</span> <span class="fu">nf</span><span class="op">(</span><span class="va">p1</span>,<span class="va">p2</span>,<span class="va">p3</span>,<span class="va">day</span><span class="op">)</span>,</span>
-<span>                         var<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"day"</span><span class="op">)</span>,</span>
-<span>                         fixed <span class="op">=</span> <span class="va">p1</span><span class="op">+</span><span class="va">p2</span><span class="op">+</span><span class="va">p3</span> <span class="op">~</span><span class="fl">1</span>,</span>
-<span>                         random <span class="op">=</span> <span class="va">p1</span> <span class="op">~</span><span class="fl">1</span>,</span>
-<span>                         family<span class="op">=</span><span class="st">'normal'</span>, </span>
-<span>                         ran.dist<span class="op">=</span><span class="st">'normal'</span>,</span>
-<span>                         fixName<span class="op">=</span><span class="st">"gamma"</span>,</span>
-<span>                         ranName<span class="op">=</span><span class="st">"b"</span>,</span>
-<span>                         dispName<span class="op">=</span><span class="st">"sigb"</span>,</span>
-<span>                         sigma<span class="op">=</span><span class="va">sigma1</span>,    <span class="co"># residual dispersion model (include residual random eff)</span></span>
-<span>                         ran.Cov<span class="op">=</span><span class="cn">NULL</span>,  <span class="co"># random effect dispersion model (include random random eff (double random eff))</span></span>
-<span>                         str.fixed<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/fixed.effects.html" class="external-link">fixef</a></span><span class="op">(</span><span class="va">cd4.fit</span><span class="op">)</span>,  <span class="co"># starting value for fixed effect</span></span>
-<span>                         str.disp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/VarCorr.html" class="external-link">VarCorr</a></span><span class="op">(</span><span class="va">cd4.fit</span><span class="op">)</span><span class="op">[</span>,<span class="st">"StdDev"</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>,  <span class="co"># starting value for fixed dispersion of random eff</span></span>
-<span>                         lower.fixed<span class="op">=</span><span class="cn">NULL</span>, <span class="co"># lower bounds for fixed eff</span></span>
-<span>                         upper.fixed<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">3</span><span class="op">)</span>, <span class="co"># upper bounds for fixed eff</span></span>
-<span>                         lower.disp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, <span class="co"># lower bounds for fixed dispersion of random eff</span></span>
-<span>                         upper.disp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">Inf</span><span class="op">)</span> <span class="co"># upper bounds for  fixed dispersion of random eff</span></span>
-<span>                         <span class="op">)</span></span>
-<span>    <span class="co"># variance model:  </span></span>
-<span>    <span class="va">sigma2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>model<span class="op">=</span><span class="op">~</span><span class="fl">1</span><span class="op">+</span><span class="va">cd4.true</span><span class="op">+</span><span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">patid</span><span class="op">)</span>,</span>
-<span>                   link<span class="op">=</span><span class="st">'log'</span>,</span>
-<span>                   ran.dist<span class="op">=</span><span class="st">"normal"</span>,</span>
-<span>                   str.fixed<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">nlme.fit</span><span class="op">$</span><span class="va">sigma</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span>,</span>
-<span>                   lower.fixed<span class="op">=</span><span class="cn">NULL</span>,</span>
-<span>                   upper.fixed<span class="op">=</span><span class="cn">NULL</span>,</span>
-<span>                   fixName<span class="op">=</span><span class="st">"alpha"</span>,</span>
-<span>                   ranName<span class="op">=</span><span class="st">"a"</span>,</span>
-<span>                   dispName<span class="op">=</span><span class="st">"siga"</span>,</span>
-<span>                   str.disp<span class="op">=</span><span class="fl">0.5</span>,</span>
-<span>                   trueVal.model<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>var<span class="op">=</span><span class="st">"cd4.true"</span>, model<span class="op">=</span><span class="va">lmeObject_JM</span><span class="op">)</span></span>
-<span>                   <span class="op">)</span></span>
-<span>    </span>
-<span>    <span class="co"># mean model</span></span>
-<span>    <span class="va">nlmeObject_JM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>nf <span class="op">=</span> <span class="st">"nf1"</span>,</span>
-<span>                          model<span class="op">=</span> <span class="va">lgcopy</span> <span class="op">~</span> <span class="fu">nf</span><span class="op">(</span><span class="va">p1</span>,<span class="va">p2</span>,<span class="va">p3</span>,<span class="va">day</span><span class="op">)</span>,</span>
-<span>                          var<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"day"</span><span class="op">)</span>,</span>
-<span>                          fixed <span class="op">=</span> <span class="va">p1</span><span class="op">+</span><span class="va">p2</span><span class="op">+</span><span class="va">p3</span> <span class="op">~</span><span class="fl">1</span>,</span>
-<span>                          random <span class="op">=</span> <span class="va">p1</span><span class="op">+</span><span class="va">p3</span> <span class="op">~</span><span class="fl">1</span>,</span>
-<span>                          family<span class="op">=</span><span class="st">'normal'</span>, </span>
-<span>                          ran.dist<span class="op">=</span><span class="st">'normal'</span>,</span>
-<span>                          fixName<span class="op">=</span><span class="st">"beta"</span>,</span>
-<span>                          ranName<span class="op">=</span><span class="st">"u"</span>,</span>
-<span>                          dispName<span class="op">=</span><span class="st">"d"</span>,</span>
-<span>                          sigma<span class="op">=</span><span class="va">sigma2</span>,    <span class="co"># residual dispersion model (include residual random eff)</span></span>
-<span>                          ran.Cov<span class="op">=</span><span class="cn">NULL</span>,  <span class="co"># random effect dispersion model (include random random eff (double random eff)</span></span>
-<span>                          str.fixed<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/fixed.effects.html" class="external-link">fixef</a></span><span class="op">(</span><span class="va">nlme.fit</span><span class="op">)</span>,  <span class="co"># starting value for fixed effect</span></span>
-<span>                          str.disp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/VarCorr.html" class="external-link">VarCorr</a></span><span class="op">(</span><span class="va">nlme.fit</span><span class="op">)</span><span class="op">[</span>,<span class="st">"StdDev"</span><span class="op">]</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"p1"</span>, <span class="st">"p3"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,  <span class="co"># starting value for fixed dispersion of random eff</span></span>
-<span>                          lower.fixed<span class="op">=</span><span class="cn">NULL</span>, <span class="co"># lower bounds for fixed eff</span></span>
-<span>                          upper.fixed<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">3</span><span class="op">)</span>, <span class="co"># upper bounds for fixed eff</span></span>
-<span>                          lower.disp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, <span class="co"># lower bounds for fixed dispersion of random eff</span></span>
-<span>                          upper.disp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">Inf</span>,<span class="cn">Inf</span><span class="op">)</span> <span class="co"># upper bounds for  fixed dispersion of random eff</span></span>
-<span>                          <span class="op">)</span></span>
-<span>    </span>
-<span>    <span class="va">nlmeObjects_JM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">nlmeObject_JM</span>, <span class="va">lmeObject_JM</span><span class="op">)</span></span>
-<span>    </span>
-<span>    <span class="va">JM</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="reference/Rnlme.html">Rnlme</a></span><span class="op">(</span>nlmeObjects<span class="op">=</span><span class="va">nlmeObjects_JM</span>, long.data<span class="op">=</span><span class="va">simdat</span>, </span>
-<span>                    idVar<span class="op">=</span><span class="st">"patid"</span>, sd.method<span class="op">=</span><span class="st">"HL"</span>, dispersion.SD <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                    independent.raneff<span class="op">=</span><span class="st">"byModel"</span><span class="op">)</span><span class="op">)</span></span>
-<span>    </span>
-<span>    <span class="va">JM</span></span>
-<span>  </span></code></pre></div>
 </div>
 </div>
 </div>
