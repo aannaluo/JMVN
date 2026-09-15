@@ -41,16 +41,20 @@ library(nlme)
 
 # Loading Model Functions
 
-The functions used throughout this tutorial are sourced from the package development directory.
+Load the JMVN library
 
-```{r}
-rm(list=ls())
-########################## source all functions  
-(file.sources = list.files(path=here::here("R"),pattern="*.R$"))
-(file.sources <- paste0(here::here("R"), "/", file.sources))
-sapply(file.sources,source)
+```{r include=FALSE}
+# rm(list=ls())
+# ########################## source all functions  
+# (file.sources = list.files(path=here::here("R"),pattern="*.R$"))
+# (file.sources <- paste0(here::here("R"), "/", file.sources))
+# sapply(file.sources,source)
 
 ###############################################
+```
+
+```{r}
+library(JMVN)
 
 ```
 
