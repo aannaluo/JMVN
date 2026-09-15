@@ -100,129 +100,9 @@ simultaneously.</li>
 <div class="section level2">
 <h2 id="loading-model-functions">Loading Model Functions<a class="anchor" aria-label="anchor" href="#loading-model-functions"></a>
 </h2>
-<p>The functions used throughout this tutorial are sourced from the
-package development directory.</p>
+<p>Load the JMVN library</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span>list<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/ls.html" class="external-link">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">########################## source all functions  </span></span>
-<span><span class="op">(</span><span class="va">file.sources</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>path<span class="op">=</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"R"</span><span class="op">)</span>,pattern<span class="op">=</span><span class="st">"*.R$"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "est_disp_ml.R"            "est_disp_reml.R"         </span></span>
-<span><span class="co">#&gt;  [3] "est_dispersion.R"         "est_fixed.R"             </span></span>
-<span><span class="co">#&gt;  [5] "est_individual_raneff.R"  "est_individual_raneff1.R"</span></span>
-<span><span class="co">#&gt;  [7] "est_raneff.R"             "get_Hessian.R"           </span></span>
-<span><span class="co">#&gt;  [9] "get_Hvalue.R"             "get_idSIGMA_aGH.R"       </span></span>
-<span><span class="co">#&gt; [11] "get_info_sigma.R"         "get_Jloglike.R"          </span></span>
-<span><span class="co">#&gt; [13] "get_loglike_value.R"      "get_nlme_loglike.R"      </span></span>
-<span><span class="co">#&gt; [15] "get_sd_dispersion.R"      "get_sd.R"                </span></span>
-<span><span class="co">#&gt; [17] "imports.R"                "make_loglike_invChi.R"   </span></span>
-<span><span class="co">#&gt; [19] "make_loglike_normal.R"    "make_Mat.R"              </span></span>
-<span><span class="co">#&gt; [21] "make_name.R"              "make_strMat.R"           </span></span>
-<span><span class="co">#&gt; [23] "mgauss.hermite.R"         "Rnlme_methods.R"         </span></span>
-<span><span class="co">#&gt; [25] "Rnlme.R"</span></span>
-<span><span class="op">(</span><span class="va">file.sources</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"R"</span><span class="op">)</span>, <span class="st">"/"</span>, <span class="va">file.sources</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "/home/runner/work/JMVN/JMVN/R/est_disp_ml.R"           </span></span>
-<span><span class="co">#&gt;  [2] "/home/runner/work/JMVN/JMVN/R/est_disp_reml.R"         </span></span>
-<span><span class="co">#&gt;  [3] "/home/runner/work/JMVN/JMVN/R/est_dispersion.R"        </span></span>
-<span><span class="co">#&gt;  [4] "/home/runner/work/JMVN/JMVN/R/est_fixed.R"             </span></span>
-<span><span class="co">#&gt;  [5] "/home/runner/work/JMVN/JMVN/R/est_individual_raneff.R" </span></span>
-<span><span class="co">#&gt;  [6] "/home/runner/work/JMVN/JMVN/R/est_individual_raneff1.R"</span></span>
-<span><span class="co">#&gt;  [7] "/home/runner/work/JMVN/JMVN/R/est_raneff.R"            </span></span>
-<span><span class="co">#&gt;  [8] "/home/runner/work/JMVN/JMVN/R/get_Hessian.R"           </span></span>
-<span><span class="co">#&gt;  [9] "/home/runner/work/JMVN/JMVN/R/get_Hvalue.R"            </span></span>
-<span><span class="co">#&gt; [10] "/home/runner/work/JMVN/JMVN/R/get_idSIGMA_aGH.R"       </span></span>
-<span><span class="co">#&gt; [11] "/home/runner/work/JMVN/JMVN/R/get_info_sigma.R"        </span></span>
-<span><span class="co">#&gt; [12] "/home/runner/work/JMVN/JMVN/R/get_Jloglike.R"          </span></span>
-<span><span class="co">#&gt; [13] "/home/runner/work/JMVN/JMVN/R/get_loglike_value.R"     </span></span>
-<span><span class="co">#&gt; [14] "/home/runner/work/JMVN/JMVN/R/get_nlme_loglike.R"      </span></span>
-<span><span class="co">#&gt; [15] "/home/runner/work/JMVN/JMVN/R/get_sd_dispersion.R"     </span></span>
-<span><span class="co">#&gt; [16] "/home/runner/work/JMVN/JMVN/R/get_sd.R"                </span></span>
-<span><span class="co">#&gt; [17] "/home/runner/work/JMVN/JMVN/R/imports.R"               </span></span>
-<span><span class="co">#&gt; [18] "/home/runner/work/JMVN/JMVN/R/make_loglike_invChi.R"   </span></span>
-<span><span class="co">#&gt; [19] "/home/runner/work/JMVN/JMVN/R/make_loglike_normal.R"   </span></span>
-<span><span class="co">#&gt; [20] "/home/runner/work/JMVN/JMVN/R/make_Mat.R"              </span></span>
-<span><span class="co">#&gt; [21] "/home/runner/work/JMVN/JMVN/R/make_name.R"             </span></span>
-<span><span class="co">#&gt; [22] "/home/runner/work/JMVN/JMVN/R/make_strMat.R"           </span></span>
-<span><span class="co">#&gt; [23] "/home/runner/work/JMVN/JMVN/R/mgauss.hermite.R"        </span></span>
-<span><span class="co">#&gt; [24] "/home/runner/work/JMVN/JMVN/R/Rnlme_methods.R"         </span></span>
-<span><span class="co">#&gt; [25] "/home/runner/work/JMVN/JMVN/R/Rnlme.R"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">file.sources</span>,<span class="va">source</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/est_disp_ml.R</span></span>
-<span><span class="co">#&gt; value   ?                                          </span></span>
-<span><span class="co">#&gt; visible FALSE                                      </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/est_disp_reml.R</span></span>
-<span><span class="co">#&gt; value   ?                                            </span></span>
-<span><span class="co">#&gt; visible FALSE                                        </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/est_dispersion.R</span></span>
-<span><span class="co">#&gt; value   ?                                             </span></span>
-<span><span class="co">#&gt; visible FALSE                                         </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/est_fixed.R</span></span>
-<span><span class="co">#&gt; value   ?                                        </span></span>
-<span><span class="co">#&gt; visible FALSE                                    </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/est_individual_raneff.R</span></span>
-<span><span class="co">#&gt; value   ?                                                    </span></span>
-<span><span class="co">#&gt; visible FALSE                                                </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/est_individual_raneff1.R</span></span>
-<span><span class="co">#&gt; value   ?                                                     </span></span>
-<span><span class="co">#&gt; visible FALSE                                                 </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/est_raneff.R</span></span>
-<span><span class="co">#&gt; value   ?                                         </span></span>
-<span><span class="co">#&gt; visible FALSE                                     </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/get_Hessian.R</span></span>
-<span><span class="co">#&gt; value   ?                                          </span></span>
-<span><span class="co">#&gt; visible FALSE                                      </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/get_Hvalue.R</span></span>
-<span><span class="co">#&gt; value   ?                                         </span></span>
-<span><span class="co">#&gt; visible FALSE                                     </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/get_idSIGMA_aGH.R</span></span>
-<span><span class="co">#&gt; value   ?                                              </span></span>
-<span><span class="co">#&gt; visible FALSE                                          </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/get_info_sigma.R</span></span>
-<span><span class="co">#&gt; value   ?                                             </span></span>
-<span><span class="co">#&gt; visible FALSE                                         </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/get_Jloglike.R</span></span>
-<span><span class="co">#&gt; value   ?                                           </span></span>
-<span><span class="co">#&gt; visible FALSE                                       </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/get_loglike_value.R</span></span>
-<span><span class="co">#&gt; value   ?                                                </span></span>
-<span><span class="co">#&gt; visible FALSE                                            </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/get_nlme_loglike.R</span></span>
-<span><span class="co">#&gt; value   ?                                               </span></span>
-<span><span class="co">#&gt; visible FALSE                                           </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/get_sd_dispersion.R</span></span>
-<span><span class="co">#&gt; value   ?                                                </span></span>
-<span><span class="co">#&gt; visible FALSE                                            </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/get_sd.R</span></span>
-<span><span class="co">#&gt; value   ?                                     </span></span>
-<span><span class="co">#&gt; visible FALSE                                 </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/imports.R</span></span>
-<span><span class="co">#&gt; value   NULL                                   </span></span>
-<span><span class="co">#&gt; visible TRUE                                   </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/make_loglike_invChi.R</span></span>
-<span><span class="co">#&gt; value   ?                                                  </span></span>
-<span><span class="co">#&gt; visible FALSE                                              </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/make_loglike_normal.R</span></span>
-<span><span class="co">#&gt; value   ?                                                  </span></span>
-<span><span class="co">#&gt; visible FALSE                                              </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/make_Mat.R</span></span>
-<span><span class="co">#&gt; value   ?                                       </span></span>
-<span><span class="co">#&gt; visible FALSE                                   </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/make_name.R</span></span>
-<span><span class="co">#&gt; value   ?                                        </span></span>
-<span><span class="co">#&gt; visible FALSE                                    </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/make_strMat.R</span></span>
-<span><span class="co">#&gt; value   ?                                          </span></span>
-<span><span class="co">#&gt; visible FALSE                                      </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/mgauss.hermite.R</span></span>
-<span><span class="co">#&gt; value   ?                                             </span></span>
-<span><span class="co">#&gt; visible FALSE                                         </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/Rnlme_methods.R</span></span>
-<span><span class="co">#&gt; value   ?                                            </span></span>
-<span><span class="co">#&gt; visible FALSE                                        </span></span>
-<span><span class="co">#&gt;         /home/runner/work/JMVN/JMVN/R/Rnlme.R</span></span>
-<span><span class="co">#&gt; value   ?                                    </span></span>
-<span><span class="co">#&gt; visible FALSE</span></span>
-<span></span>
-<span><span class="co">###############################################</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/aannaluo/JMVN/" class="external-link">JMVN</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="simulated-longitudinal-data">Simulated Longitudinal Data<a class="anchor" aria-label="anchor" href="#simulated-longitudinal-data"></a>
@@ -358,7 +238,69 @@ estimated CD4 trajectory.</p>
 <span>    <span class="va">TS</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/Rnlme.html">Rnlme</a></span><span class="op">(</span>nlmeObjects<span class="op">=</span><span class="va">nlmeObjects_TS</span>, long.data<span class="op">=</span><span class="va">simdat</span>, </span>
 <span>                        idVar<span class="op">=</span><span class="st">"patid"</span>, sd.method<span class="op">=</span><span class="st">"HL"</span>, dispersion.SD <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                        independent.raneff<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in str_trim(resp) : could not find function "str_trim"</span></span></code></pre></div>
+<span><span class="co">#&gt; ############## Iteration: 1 ############### </span></span>
+<span><span class="co">#&gt; Start estimating random effects ...</span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating fixed parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating dispersion parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; fixed.par: 2.49 2.84 7.5 -2.65 0.57 </span></span>
+<span><span class="co">#&gt; FixedParDiff =  114211.7 </span></span>
+<span><span class="co">#&gt; likDiff =  1 </span></span>
+<span><span class="co">#&gt; dispersion.par: 0.25 1.03 0.73 </span></span>
+<span><span class="co">#&gt; loglike: -2929.084 </span></span>
+<span><span class="co">#&gt; SIGMA: 1 -0.5758655 -0.5758655 1 </span></span>
+<span><span class="co">#&gt; ########################################## </span></span>
+<span><span class="co">#&gt; ############## Iteration: 2 ############### </span></span>
+<span><span class="co">#&gt; Start estimating random effects ...</span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating fixed parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating dispersion parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; fixed.par: 2.53 2.85 9.02 -3.03 0.63 </span></span>
+<span><span class="co">#&gt; FixedParDiff =  0.09371989 </span></span>
+<span><span class="co">#&gt; likDiff =  0.04400738 </span></span>
+<span><span class="co">#&gt; dispersion.par: 0.24 0.29 0.76 </span></span>
+<span><span class="co">#&gt; loglike: -2800.183 </span></span>
+<span><span class="co">#&gt; SIGMA: 1 -0.9708461 -0.9708461 1 </span></span>
+<span><span class="co">#&gt; ########################################## </span></span>
+<span><span class="co">#&gt; ############## Iteration: 3 ############### </span></span>
+<span><span class="co">#&gt; Start estimating random effects ...</span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating fixed parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating dispersion parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; fixed.par: 2.49 2.85 8.27 -3.25 0.67 </span></span>
+<span><span class="co">#&gt; FixedParDiff =  0.04721698 </span></span>
+<span><span class="co">#&gt; likDiff =  0.03237125 </span></span>
+<span><span class="co">#&gt; dispersion.par: 0.23 0 0.76 </span></span>
+<span><span class="co">#&gt; loglike: -2709.537 </span></span>
+<span><span class="co">#&gt; SIGMA: 1 -0.9876883 -0.9876883 1 </span></span>
+<span><span class="co">#&gt; ########################################## </span></span>
+<span><span class="co">#&gt; ############## Iteration: 4 ############### </span></span>
+<span><span class="co">#&gt; Start estimating random effects ...</span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating fixed parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating dispersion parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; fixed.par: 2.48 2.86 7.85 -3.51 0.72 </span></span>
+<span><span class="co">#&gt; FixedParDiff =  0.04164811 </span></span>
+<span><span class="co">#&gt; likDiff =  0.0008003986 </span></span>
+<span><span class="co">#&gt; dispersion.par: 0.21 0 0.75 </span></span>
+<span><span class="co">#&gt; loglike: -2711.706 </span></span>
+<span><span class="co">#&gt; SIGMA: 1 -0.9876883 -0.9876883 1 </span></span>
+<span><span class="co">#&gt; ##########################################</span></span>
+<span><span class="co">#&gt; Successful convergence. Iteration stops because likDiff &lt;= itertol.</span></span>
+<span><span class="co">#&gt; Start estimating SD for fixed parameters ...</span></span>
+<span><span class="co">#&gt;  ...</span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating SD for dispersion parameters ...</span></span>
+<span><span class="co">#&gt;  ...</span></span>
+<span><span class="co">#&gt; done.</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -447,7 +389,69 @@ trajectory is propagated through the entire estimation procedure.</p>
 <span>    <span class="va">JM</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/Rnlme.html">Rnlme</a></span><span class="op">(</span>nlmeObjects<span class="op">=</span><span class="va">nlmeObjects_JM</span>, long.data<span class="op">=</span><span class="va">simdat</span>, </span>
 <span>                    idVar<span class="op">=</span><span class="st">"patid"</span>, sd.method<span class="op">=</span><span class="st">"HL"</span>, dispersion.SD <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                    independent.raneff<span class="op">=</span><span class="st">"byModel"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in str_trim(resp) : could not find function "str_trim"</span></span>
+<span><span class="co">#&gt; ############## Iteration: 1 ############### </span></span>
+<span><span class="co">#&gt; Start estimating random effects ...</span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating fixed parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating dispersion parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; fixed.par: 2.49 2.84 7.49 -2.63 0.57 5.22 1.58 -1.17 </span></span>
+<span><span class="co">#&gt; FixedParDiff =  70909.3 </span></span>
+<span><span class="co">#&gt; likDiff =  1 </span></span>
+<span><span class="co">#&gt; dispersion.par: 0.25 1.03 0.72 0.4 0.2 </span></span>
+<span><span class="co">#&gt; loglike: -2789.306 </span></span>
+<span><span class="co">#&gt; SIGMA: 1 -0.5757934 0 -0.5757934 1 0 0 0 1 </span></span>
+<span><span class="co">#&gt; ########################################## </span></span>
+<span><span class="co">#&gt; ############## Iteration: 2 ############### </span></span>
+<span><span class="co">#&gt; Start estimating random effects ...</span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating fixed parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating dispersion parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; fixed.par: 2.53 2.85 9.01 -2.98 0.62 5.22 1.58 -1.16 </span></span>
+<span><span class="co">#&gt; FixedParDiff =  0.05698242 </span></span>
+<span><span class="co">#&gt; likDiff =  0.046215 </span></span>
+<span><span class="co">#&gt; dispersion.par: 0.24 0.29 0.76 0.4 0.2 </span></span>
+<span><span class="co">#&gt; loglike: -2660.398 </span></span>
+<span><span class="co">#&gt; SIGMA: 1 -0.9707475 0 -0.9707475 1 0 0 0 1 </span></span>
+<span><span class="co">#&gt; ########################################## </span></span>
+<span><span class="co">#&gt; ############## Iteration: 3 ############### </span></span>
+<span><span class="co">#&gt; Start estimating random effects ...</span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating fixed parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating dispersion parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; fixed.par: 2.49 2.85 8.27 -3.16 0.66 5.22 1.58 -1.16 </span></span>
+<span><span class="co">#&gt; FixedParDiff =  0.02646611 </span></span>
+<span><span class="co">#&gt; likDiff =  0.03411887 </span></span>
+<span><span class="co">#&gt; dispersion.par: 0.23 0 0.76 0.4 0.2 </span></span>
+<span><span class="co">#&gt; loglike: -2569.628 </span></span>
+<span><span class="co">#&gt; SIGMA: 1 -0.9876883 0 -0.9876883 1 0 0 0 1 </span></span>
+<span><span class="co">#&gt; ########################################## </span></span>
+<span><span class="co">#&gt; ############## Iteration: 4 ############### </span></span>
+<span><span class="co">#&gt; Start estimating random effects ...</span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating fixed parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating dispersion parameters ... </span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; fixed.par: 2.48 2.86 7.85 -3.37 0.69 5.22 1.58 -1.16 </span></span>
+<span><span class="co">#&gt; FixedParDiff =  0.02262631 </span></span>
+<span><span class="co">#&gt; likDiff =  0.0008621903 </span></span>
+<span><span class="co">#&gt; dispersion.par: 0.21 0 0.75 0.4 0.2 </span></span>
+<span><span class="co">#&gt; loglike: -2571.844 </span></span>
+<span><span class="co">#&gt; SIGMA: 1 -0.9876883 0 -0.9876883 1 0 0 0 1 </span></span>
+<span><span class="co">#&gt; ##########################################</span></span>
+<span><span class="co">#&gt; Successful convergence. Iteration stops because likDiff &lt;= itertol.</span></span>
+<span><span class="co">#&gt; Start estimating SD for fixed parameters ...</span></span>
+<span><span class="co">#&gt;  ...</span></span>
+<span><span class="co">#&gt; done.</span></span>
+<span><span class="co">#&gt; Start estimating SD for dispersion parameters ...</span></span>
+<span><span class="co">#&gt;  ...</span></span>
+<span><span class="co">#&gt; done.</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">JM</span>, file <span class="op">=</span> <span class="st">"JM.rds"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">

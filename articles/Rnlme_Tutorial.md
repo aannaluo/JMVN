@@ -35,131 +35,11 @@ library(nlme)
 
 ## Loading Model Functions
 
-The functions used throughout this tutorial are sourced from the package
-development directory.
+Load the JMVN library
 
 ``` r
 
-rm(list=ls())
-########################## source all functions  
-(file.sources = list.files(path=here::here("R"),pattern="*.R$"))
-#>  [1] "est_disp_ml.R"            "est_disp_reml.R"         
-#>  [3] "est_dispersion.R"         "est_fixed.R"             
-#>  [5] "est_individual_raneff.R"  "est_individual_raneff1.R"
-#>  [7] "est_raneff.R"             "get_Hessian.R"           
-#>  [9] "get_Hvalue.R"             "get_idSIGMA_aGH.R"       
-#> [11] "get_info_sigma.R"         "get_Jloglike.R"          
-#> [13] "get_loglike_value.R"      "get_nlme_loglike.R"      
-#> [15] "get_sd_dispersion.R"      "get_sd.R"                
-#> [17] "imports.R"                "make_loglike_invChi.R"   
-#> [19] "make_loglike_normal.R"    "make_Mat.R"              
-#> [21] "make_name.R"              "make_strMat.R"           
-#> [23] "mgauss.hermite.R"         "Rnlme_methods.R"         
-#> [25] "Rnlme.R"
-(file.sources <- paste0(here::here("R"), "/", file.sources))
-#>  [1] "/home/runner/work/JMVN/JMVN/R/est_disp_ml.R"           
-#>  [2] "/home/runner/work/JMVN/JMVN/R/est_disp_reml.R"         
-#>  [3] "/home/runner/work/JMVN/JMVN/R/est_dispersion.R"        
-#>  [4] "/home/runner/work/JMVN/JMVN/R/est_fixed.R"             
-#>  [5] "/home/runner/work/JMVN/JMVN/R/est_individual_raneff.R" 
-#>  [6] "/home/runner/work/JMVN/JMVN/R/est_individual_raneff1.R"
-#>  [7] "/home/runner/work/JMVN/JMVN/R/est_raneff.R"            
-#>  [8] "/home/runner/work/JMVN/JMVN/R/get_Hessian.R"           
-#>  [9] "/home/runner/work/JMVN/JMVN/R/get_Hvalue.R"            
-#> [10] "/home/runner/work/JMVN/JMVN/R/get_idSIGMA_aGH.R"       
-#> [11] "/home/runner/work/JMVN/JMVN/R/get_info_sigma.R"        
-#> [12] "/home/runner/work/JMVN/JMVN/R/get_Jloglike.R"          
-#> [13] "/home/runner/work/JMVN/JMVN/R/get_loglike_value.R"     
-#> [14] "/home/runner/work/JMVN/JMVN/R/get_nlme_loglike.R"      
-#> [15] "/home/runner/work/JMVN/JMVN/R/get_sd_dispersion.R"     
-#> [16] "/home/runner/work/JMVN/JMVN/R/get_sd.R"                
-#> [17] "/home/runner/work/JMVN/JMVN/R/imports.R"               
-#> [18] "/home/runner/work/JMVN/JMVN/R/make_loglike_invChi.R"   
-#> [19] "/home/runner/work/JMVN/JMVN/R/make_loglike_normal.R"   
-#> [20] "/home/runner/work/JMVN/JMVN/R/make_Mat.R"              
-#> [21] "/home/runner/work/JMVN/JMVN/R/make_name.R"             
-#> [22] "/home/runner/work/JMVN/JMVN/R/make_strMat.R"           
-#> [23] "/home/runner/work/JMVN/JMVN/R/mgauss.hermite.R"        
-#> [24] "/home/runner/work/JMVN/JMVN/R/Rnlme_methods.R"         
-#> [25] "/home/runner/work/JMVN/JMVN/R/Rnlme.R"
-sapply(file.sources,source)
-#>         /home/runner/work/JMVN/JMVN/R/est_disp_ml.R
-#> value   ?                                          
-#> visible FALSE                                      
-#>         /home/runner/work/JMVN/JMVN/R/est_disp_reml.R
-#> value   ?                                            
-#> visible FALSE                                        
-#>         /home/runner/work/JMVN/JMVN/R/est_dispersion.R
-#> value   ?                                             
-#> visible FALSE                                         
-#>         /home/runner/work/JMVN/JMVN/R/est_fixed.R
-#> value   ?                                        
-#> visible FALSE                                    
-#>         /home/runner/work/JMVN/JMVN/R/est_individual_raneff.R
-#> value   ?                                                    
-#> visible FALSE                                                
-#>         /home/runner/work/JMVN/JMVN/R/est_individual_raneff1.R
-#> value   ?                                                     
-#> visible FALSE                                                 
-#>         /home/runner/work/JMVN/JMVN/R/est_raneff.R
-#> value   ?                                         
-#> visible FALSE                                     
-#>         /home/runner/work/JMVN/JMVN/R/get_Hessian.R
-#> value   ?                                          
-#> visible FALSE                                      
-#>         /home/runner/work/JMVN/JMVN/R/get_Hvalue.R
-#> value   ?                                         
-#> visible FALSE                                     
-#>         /home/runner/work/JMVN/JMVN/R/get_idSIGMA_aGH.R
-#> value   ?                                              
-#> visible FALSE                                          
-#>         /home/runner/work/JMVN/JMVN/R/get_info_sigma.R
-#> value   ?                                             
-#> visible FALSE                                         
-#>         /home/runner/work/JMVN/JMVN/R/get_Jloglike.R
-#> value   ?                                           
-#> visible FALSE                                       
-#>         /home/runner/work/JMVN/JMVN/R/get_loglike_value.R
-#> value   ?                                                
-#> visible FALSE                                            
-#>         /home/runner/work/JMVN/JMVN/R/get_nlme_loglike.R
-#> value   ?                                               
-#> visible FALSE                                           
-#>         /home/runner/work/JMVN/JMVN/R/get_sd_dispersion.R
-#> value   ?                                                
-#> visible FALSE                                            
-#>         /home/runner/work/JMVN/JMVN/R/get_sd.R
-#> value   ?                                     
-#> visible FALSE                                 
-#>         /home/runner/work/JMVN/JMVN/R/imports.R
-#> value   NULL                                   
-#> visible TRUE                                   
-#>         /home/runner/work/JMVN/JMVN/R/make_loglike_invChi.R
-#> value   ?                                                  
-#> visible FALSE                                              
-#>         /home/runner/work/JMVN/JMVN/R/make_loglike_normal.R
-#> value   ?                                                  
-#> visible FALSE                                              
-#>         /home/runner/work/JMVN/JMVN/R/make_Mat.R
-#> value   ?                                       
-#> visible FALSE                                   
-#>         /home/runner/work/JMVN/JMVN/R/make_name.R
-#> value   ?                                        
-#> visible FALSE                                    
-#>         /home/runner/work/JMVN/JMVN/R/make_strMat.R
-#> value   ?                                          
-#> visible FALSE                                      
-#>         /home/runner/work/JMVN/JMVN/R/mgauss.hermite.R
-#> value   ?                                             
-#> visible FALSE                                         
-#>         /home/runner/work/JMVN/JMVN/R/Rnlme_methods.R
-#> value   ?                                            
-#> visible FALSE                                        
-#>         /home/runner/work/JMVN/JMVN/R/Rnlme.R
-#> value   ?                                    
-#> visible FALSE
-
-###############################################
+library(JMVN)
 ```
 
 ## Simulated Longitudinal Data
@@ -309,7 +189,69 @@ The nonlinear response model is specified below.
     TS <- try(Rnlme(nlmeObjects=nlmeObjects_TS, long.data=simdat, 
                         idVar="patid", sd.method="HL", dispersion.SD = TRUE,
                         independent.raneff=FALSE))
-#> Error in str_trim(resp) : could not find function "str_trim"
+#> ############## Iteration: 1 ############### 
+#> Start estimating random effects ...
+#> done.
+#> Start estimating fixed parameters ... 
+#> done.
+#> Start estimating dispersion parameters ... 
+#> done.
+#> fixed.par: 2.49 2.84 7.5 -2.65 0.57 
+#> FixedParDiff =  114211.7 
+#> likDiff =  1 
+#> dispersion.par: 0.25 1.03 0.73 
+#> loglike: -2929.084 
+#> SIGMA: 1 -0.5758655 -0.5758655 1 
+#> ########################################## 
+#> ############## Iteration: 2 ############### 
+#> Start estimating random effects ...
+#> done.
+#> Start estimating fixed parameters ... 
+#> done.
+#> Start estimating dispersion parameters ... 
+#> done.
+#> fixed.par: 2.53 2.85 9.02 -3.03 0.63 
+#> FixedParDiff =  0.09371989 
+#> likDiff =  0.04400738 
+#> dispersion.par: 0.24 0.29 0.76 
+#> loglike: -2800.183 
+#> SIGMA: 1 -0.9708461 -0.9708461 1 
+#> ########################################## 
+#> ############## Iteration: 3 ############### 
+#> Start estimating random effects ...
+#> done.
+#> Start estimating fixed parameters ... 
+#> done.
+#> Start estimating dispersion parameters ... 
+#> done.
+#> fixed.par: 2.49 2.85 8.27 -3.25 0.67 
+#> FixedParDiff =  0.04721698 
+#> likDiff =  0.03237125 
+#> dispersion.par: 0.23 0 0.76 
+#> loglike: -2709.537 
+#> SIGMA: 1 -0.9876883 -0.9876883 1 
+#> ########################################## 
+#> ############## Iteration: 4 ############### 
+#> Start estimating random effects ...
+#> done.
+#> Start estimating fixed parameters ... 
+#> done.
+#> Start estimating dispersion parameters ... 
+#> done.
+#> fixed.par: 2.48 2.86 7.85 -3.51 0.72 
+#> FixedParDiff =  0.04164811 
+#> likDiff =  0.0008003986 
+#> dispersion.par: 0.21 0 0.75 
+#> loglike: -2711.706 
+#> SIGMA: 1 -0.9876883 -0.9876883 1 
+#> ##########################################
+#> Successful convergence. Iteration stops because likDiff <= itertol.
+#> Start estimating SD for fixed parameters ...
+#>  ...
+#> done.
+#> Start estimating SD for dispersion parameters ...
+#>  ...
+#> done.
 ```
 
 ## Joint Modeling Approach
@@ -414,7 +356,69 @@ Finally, both models are fitted simultaneously.
     JM <- try(Rnlme(nlmeObjects=nlmeObjects_JM, long.data=simdat, 
                     idVar="patid", sd.method="HL", dispersion.SD = TRUE,
                     independent.raneff="byModel"))
-#> Error in str_trim(resp) : could not find function "str_trim"
+#> ############## Iteration: 1 ############### 
+#> Start estimating random effects ...
+#> done.
+#> Start estimating fixed parameters ... 
+#> done.
+#> Start estimating dispersion parameters ... 
+#> done.
+#> fixed.par: 2.49 2.84 7.49 -2.63 0.57 5.22 1.58 -1.17 
+#> FixedParDiff =  70909.3 
+#> likDiff =  1 
+#> dispersion.par: 0.25 1.03 0.72 0.4 0.2 
+#> loglike: -2789.306 
+#> SIGMA: 1 -0.5757934 0 -0.5757934 1 0 0 0 1 
+#> ########################################## 
+#> ############## Iteration: 2 ############### 
+#> Start estimating random effects ...
+#> done.
+#> Start estimating fixed parameters ... 
+#> done.
+#> Start estimating dispersion parameters ... 
+#> done.
+#> fixed.par: 2.53 2.85 9.01 -2.98 0.62 5.22 1.58 -1.16 
+#> FixedParDiff =  0.05698242 
+#> likDiff =  0.046215 
+#> dispersion.par: 0.24 0.29 0.76 0.4 0.2 
+#> loglike: -2660.398 
+#> SIGMA: 1 -0.9707475 0 -0.9707475 1 0 0 0 1 
+#> ########################################## 
+#> ############## Iteration: 3 ############### 
+#> Start estimating random effects ...
+#> done.
+#> Start estimating fixed parameters ... 
+#> done.
+#> Start estimating dispersion parameters ... 
+#> done.
+#> fixed.par: 2.49 2.85 8.27 -3.16 0.66 5.22 1.58 -1.16 
+#> FixedParDiff =  0.02646611 
+#> likDiff =  0.03411887 
+#> dispersion.par: 0.23 0 0.76 0.4 0.2 
+#> loglike: -2569.628 
+#> SIGMA: 1 -0.9876883 0 -0.9876883 1 0 0 0 1 
+#> ########################################## 
+#> ############## Iteration: 4 ############### 
+#> Start estimating random effects ...
+#> done.
+#> Start estimating fixed parameters ... 
+#> done.
+#> Start estimating dispersion parameters ... 
+#> done.
+#> fixed.par: 2.48 2.86 7.85 -3.37 0.69 5.22 1.58 -1.16 
+#> FixedParDiff =  0.02262631 
+#> likDiff =  0.0008621903 
+#> dispersion.par: 0.21 0 0.75 0.4 0.2 
+#> loglike: -2571.844 
+#> SIGMA: 1 -0.9876883 0 -0.9876883 1 0 0 0 1 
+#> ##########################################
+#> Successful convergence. Iteration stops because likDiff <= itertol.
+#> Start estimating SD for fixed parameters ...
+#>  ...
+#> done.
+#> Start estimating SD for dispersion parameters ...
+#>  ...
+#> done.
     saveRDS(JM, file = "JM.rds")
 ```
 
