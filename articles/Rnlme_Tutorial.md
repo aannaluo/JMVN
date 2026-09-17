@@ -39,7 +39,7 @@ Load the JMVN library
 
 ``` r
 
-library(JMVN)
+#library(JMVN)
 ```
 
 ## Simulated Longitudinal Data
@@ -57,7 +57,12 @@ The variables are:
 ``` r
 
 #### Read in the data
+set.seed(123)
 simdat <- readRDS(here::here("inst/extdata","toy_data.rds"))
+
+simdat <- simdat[
+  simdat$patid %in% sample(unique(simdat$patid), 25),
+]
 
 # 100 unique patients
 # 15 repeated measurements per patient
@@ -189,69 +194,7 @@ The nonlinear response model is specified below.
     TS <- try(Rnlme(nlmeObjects=nlmeObjects_TS, long.data=simdat, 
                         idVar="patid", sd.method="HL", dispersion.SD = TRUE,
                         independent.raneff=FALSE))
-#> ############## Iteration: 1 ############### 
-#> Start estimating random effects ...
-#> done.
-#> Start estimating fixed parameters ... 
-#> done.
-#> Start estimating dispersion parameters ... 
-#> done.
-#> fixed.par: 2.49 2.84 7.5 -2.65 0.57 
-#> FixedParDiff =  114211.7 
-#> likDiff =  1 
-#> dispersion.par: 0.25 1.03 0.73 
-#> loglike: -2929.084 
-#> SIGMA: 1 -0.5758655 -0.5758655 1 
-#> ########################################## 
-#> ############## Iteration: 2 ############### 
-#> Start estimating random effects ...
-#> done.
-#> Start estimating fixed parameters ... 
-#> done.
-#> Start estimating dispersion parameters ... 
-#> done.
-#> fixed.par: 2.53 2.85 9.02 -3.03 0.63 
-#> FixedParDiff =  0.09371989 
-#> likDiff =  0.04400738 
-#> dispersion.par: 0.24 0.29 0.76 
-#> loglike: -2800.183 
-#> SIGMA: 1 -0.9708461 -0.9708461 1 
-#> ########################################## 
-#> ############## Iteration: 3 ############### 
-#> Start estimating random effects ...
-#> done.
-#> Start estimating fixed parameters ... 
-#> done.
-#> Start estimating dispersion parameters ... 
-#> done.
-#> fixed.par: 2.49 2.85 8.27 -3.25 0.67 
-#> FixedParDiff =  0.04721698 
-#> likDiff =  0.03237125 
-#> dispersion.par: 0.23 0 0.76 
-#> loglike: -2709.537 
-#> SIGMA: 1 -0.9876883 -0.9876883 1 
-#> ########################################## 
-#> ############## Iteration: 4 ############### 
-#> Start estimating random effects ...
-#> done.
-#> Start estimating fixed parameters ... 
-#> done.
-#> Start estimating dispersion parameters ... 
-#> done.
-#> fixed.par: 2.48 2.86 7.85 -3.51 0.72 
-#> FixedParDiff =  0.04164811 
-#> likDiff =  0.0008003986 
-#> dispersion.par: 0.21 0 0.75 
-#> loglike: -2711.706 
-#> SIGMA: 1 -0.9876883 -0.9876883 1 
-#> ##########################################
-#> Successful convergence. Iteration stops because likDiff <= itertol.
-#> Start estimating SD for fixed parameters ...
-#>  ...
-#> done.
-#> Start estimating SD for dispersion parameters ...
-#>  ...
-#> done.
+#> Error in str_trim(resp) : could not find function "str_trim"
 ```
 
 ## Joint Modeling Approach
@@ -324,7 +267,6 @@ The measurement error model is defined below.
                    str.disp=0.5,
                    trueVal.model=list(var="cd4.true", model=lmeObject_JM)
                    )
-# variance model
 ```
 
 Finally, both models are fitted simultaneously.
@@ -356,70 +298,7 @@ Finally, both models are fitted simultaneously.
     JM <- try(Rnlme(nlmeObjects=nlmeObjects_JM, long.data=simdat, 
                     idVar="patid", sd.method="HL", dispersion.SD = TRUE,
                     independent.raneff="byModel"))
-#> ############## Iteration: 1 ############### 
-#> Start estimating random effects ...
-#> done.
-#> Start estimating fixed parameters ... 
-#> done.
-#> Start estimating dispersion parameters ... 
-#> done.
-#> fixed.par: 2.49 2.84 7.49 -2.63 0.57 5.22 1.58 -1.17 
-#> FixedParDiff =  70909.3 
-#> likDiff =  1 
-#> dispersion.par: 0.25 1.03 0.72 0.4 0.2 
-#> loglike: -2789.306 
-#> SIGMA: 1 -0.5757934 0 -0.5757934 1 0 0 0 1 
-#> ########################################## 
-#> ############## Iteration: 2 ############### 
-#> Start estimating random effects ...
-#> done.
-#> Start estimating fixed parameters ... 
-#> done.
-#> Start estimating dispersion parameters ... 
-#> done.
-#> fixed.par: 2.53 2.85 9.01 -2.98 0.62 5.22 1.58 -1.16 
-#> FixedParDiff =  0.05698242 
-#> likDiff =  0.046215 
-#> dispersion.par: 0.24 0.29 0.76 0.4 0.2 
-#> loglike: -2660.398 
-#> SIGMA: 1 -0.9707475 0 -0.9707475 1 0 0 0 1 
-#> ########################################## 
-#> ############## Iteration: 3 ############### 
-#> Start estimating random effects ...
-#> done.
-#> Start estimating fixed parameters ... 
-#> done.
-#> Start estimating dispersion parameters ... 
-#> done.
-#> fixed.par: 2.49 2.85 8.27 -3.16 0.66 5.22 1.58 -1.16 
-#> FixedParDiff =  0.02646611 
-#> likDiff =  0.03411887 
-#> dispersion.par: 0.23 0 0.76 0.4 0.2 
-#> loglike: -2569.628 
-#> SIGMA: 1 -0.9876883 0 -0.9876883 1 0 0 0 1 
-#> ########################################## 
-#> ############## Iteration: 4 ############### 
-#> Start estimating random effects ...
-#> done.
-#> Start estimating fixed parameters ... 
-#> done.
-#> Start estimating dispersion parameters ... 
-#> done.
-#> fixed.par: 2.48 2.86 7.85 -3.37 0.69 5.22 1.58 -1.16 
-#> FixedParDiff =  0.02262631 
-#> likDiff =  0.0008621903 
-#> dispersion.par: 0.21 0 0.75 0.4 0.2 
-#> loglike: -2571.844 
-#> SIGMA: 1 -0.9876883 0 -0.9876883 1 0 0 0 1 
-#> ##########################################
-#> Successful convergence. Iteration stops because likDiff <= itertol.
-#> Start estimating SD for fixed parameters ...
-#>  ...
-#> done.
-#> Start estimating SD for dispersion parameters ...
-#>  ...
-#> done.
-    saveRDS(JM, file = "JM.rds")
+#> Error in str_trim(resp) : could not find function "str_trim"
 ```
 
 ## Summary
