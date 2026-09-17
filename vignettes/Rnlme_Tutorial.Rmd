@@ -44,17 +44,17 @@ library(nlme)
 Load the JMVN library
 
 ```{r include=FALSE}
-# rm(list=ls())
+ rm(list=ls())
 # ########################## source all functions  
-# (file.sources = list.files(path=here::here("R"),pattern="*.R$"))
-# (file.sources <- paste0(here::here("R"), "/", file.sources))
-# sapply(file.sources,source)
+ (file.sources = list.files(path=here::here("R"),pattern="*.R$"))
+ (file.sources <- paste0(here::here("R"), "/", file.sources))
+ sapply(file.sources,source)
 
 ###############################################
 ```
 
 ```{r}
-library(JMVN)
+#library(JMVN)
 
 ```
 
@@ -71,7 +71,12 @@ The variables are:
 
 ```{r}
 #### Read in the data
+set.seed(123)
 simdat <- readRDS(here::here("inst/extdata","toy_data.rds"))
+
+simdat <- simdat[
+  simdat$patid %in% sample(unique(simdat$patid), 25),
+]
 
 # 100 unique patients
 # 15 repeated measurements per patient
@@ -254,7 +259,6 @@ The measurement error model is defined below.
                    str.disp=0.5,
                    trueVal.model=list(var="cd4.true", model=lmeObject_JM)
                    )
-# variance model
 ```
 
 Finally, both models are fitted simultaneously.
@@ -285,7 +289,6 @@ Finally, both models are fitted simultaneously.
     JM <- try(Rnlme(nlmeObjects=nlmeObjects_JM, long.data=simdat, 
                     idVar="patid", sd.method="HL", dispersion.SD = TRUE,
                     independent.raneff="byModel"))
-    saveRDS(JM, file = "JM.rds")
 ```
 
 # Summary
